@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<link rel="stylesheet" href="/bootstrap/css/bootstrap-icons.css">
+	<script src="/bootstrap/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+
+	<style>
+		body {
+			padding-bottom: 200px;
+		}
+		.wrapper {
+			/* white-space: pre-line; */
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			-webkit-box-orient: vertical;
+		}
+	</style>
+	<title>
+		<%= title %>
+	</title>
+	<% if(PatientDetails.length==0) { %>
+		<% PatientDetails=undefined; %>
+	<% } else { %>
+		<%
+			PatientDetails=PatientDetails[0]; 
+			PatientDetails.CaseNo=String(PatientDetails.CaseNo).padStart(4,'0'); 
+			const date=PatientDetails.FirstVisit; 
+			PatientDetails.FirstVisit=String(date.getDate()).padStart(2, '0' ) + "-" + String(date.getMonth() + 1).padStart(2, '0' ) + "-" + date.getFullYear(); 
+		%>
+	<% } %>
+</head>
+
+<body>
+	<div class="container">
+		<%- include("./partials/header.ejs") %>
+		<% if (PatientDetails==undefined) { %>
+			<h3>No record found</h3>
+		<% } else { %>
+			<% if(EditMode==false) { %>
+				<div id="BasicInfo">
+					<table class="table table-striped table-bordered">
+						<tbody>
+							<tr>
+								<td colspan="5"><strong>Patient Name : </strong>
+									<%= PatientDetails.PatientName %>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="1"><strong>Age : </strong>
+									<%= Math.trunc(PatientDetails.Age) %> years, <%= Math.round((PatientDetails.Age -
+											Math.trunc(PatientDetails.Age))*12) %> months
+								</td>
+								<td colspan="1"><strong>Gender : </strong>
+									<% if(PatientDetails.Gender === "M" ) { %>
+										Male
+									<% } else if(PatientDetails.Gender === "F" ) { %>
+										Female
+									<% } %>
+								</td>
+								<td colspan="3"><strong>Guardian's Name : </strong>
+									<%= PatientDetails.GuardianName %>
+								</td>
+							</tr>
+							<tr>
+								<% if(PatientDetails.Type=='G' ) { %>
+									<td colspan="5"><strong>Disease : (General) </strong>
+										<%= PatientDetails.Disease %>
+									</td>
+								<% } else if (PatientDetails.Type=='B' ){%>
+										<td colspan="5"><strong>Disease : (Burns) </strong>
+											<%= PatientDetails.Disease %>
+										</td>
+								<% } %>
+							</tr>
+							<tr>
+								<td colspan="5"><strong>Address : </strong>
+									<%= PatientDetails.Address %>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="1"><strong>Case No : </strong>
+									<%= PatientDetails.CaseNo %>
+								</td>
+								<% if(PatientDetails.Status=="ACTIVE" ) {%>
+									<td colspan="1"><strong>Status : <span style="color:green">ACTIVE</span> </td>
+								<% } else if(PatientDetails.Status=="CLOSED" ) {%>
+									<td colspan="1"><strong>Status : <span style="color:red">CLOSED</span> </td>
+								<% } %>
+								<td colspan="1"><strong>Phone Number : </strong>
+									<%= PatientDetails.PhoneNumber %>
+								</td>
+								<td colspan="1"><strong>First Visit : </strong>
+									<%= PatientDetails.FirstVisit %>
+								</td>
+								<td colspan="1"><strong>Discount Mode : </strong><%= PatientDetails.DiscountMode %> </td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="wrapper">
+					<h4>Description</h4>
+					<div class="alert alert-info" role="alert">
+						This feature is under development
+					</div>
+					<!-- <textarea class="form-control-plaintext" id="DescriptionTextAreaReadOnly" rows="5" readonly style="padding-left: 10px;padding-right: 5px;" placeholder="Enter Patient Description here..."></textarea> -->
+				</div>
+				<% if(PatientDetails.CaseNo !== "Guest") { %> 
+					<div class="d-flex justify-content-between" style="margin-top: 30px;">
+						<h4>Balance: Rs. <%= Balance %></h4>
+						<form method="POST">
+							<button type="submit" name="editDetails" value="edit" class="btn btn-primary">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+									<path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+									<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+								</svg>
+								Edit
+							</button>
+						</form>
+					</div>
+				<% } %>
+				<hr>
+				<% if(PatientDetails.Status=="ACTIVE" && PatientDetails.CaseNo !== "Guest" ) { %> 
+					<form method="POST" style="margin-top: 15px;">
+						<div class="input-group mb-3">
+							<span class="input-group-text">Deposit Amount</span>
+							<input type="number" class="form-control" id="depoamt" name="depositamount" style="max-width: 110px;" required>
+						</div>
+						<div class="input-group mb-3">
+							<span class="input-group-text" id="basic-addon1">Deposit Date</span>
+							<input type="date" class="form-control" id="depodate" name="depositdate" style="max-width: 150px;" required>
+						</div>
+						<button type="submit" name="deposit" value="deposit" class="btn btn-primary"> Deposit</button>
+					</form>
+					<hr>
+				<% } %>
+			<% } else { %>
+				<form method="POST">
+					<div id="BasicInfo">
+						<table class="table table-striped table-bordered">
+							<tbody>
+								<tr>
+									<td colspan="6">
+										<div class="input-group mb-3"><span class="input-group-text" id="basic-addon1"><strong>Patient's Name</strong></span>
+											<input type="text" class="form-control" id="patientname" name="patientname" value="<%= PatientDetails.PatientName %>" required>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<div class="input-group mb-3">
+											<span class="input-group-text"><strong>Age (years)</strong></span>
+											<input type="number" class="form-control" id="ageyears" name="ageyears"
+												value=<%=Math.trunc(PatientDetails.Age) %>
+											min=0 required>
+											<span class="input-group-text"><strong>(months)</strong></span>
+											<input type="number" class="form-control" id="agemonths" name="agemonths"
+												value=<%=Math.round((PatientDetails.Age - Math.trunc(PatientDetails.Age))*12) %> min=0
+											max=11 required>
+										</div>
+									</td>
+									<td colspan="1">
+										<div class="input-group mb-3">
+											<label class="input-group-text" for="gender"
+												style="margin-left: 10px;"><strong>Gender</strong></label>
+											<select class="form-select" id="gender" name="gender">
+												<% if(PatientDetails.Gender=="M" ) { %>
+													<option value="M" selected>Male</option>
+													<option value="F">Female</option>
+												<% } else if(PatientDetails.Gender=="F" ) { %>
+													<option value="M">Male</option>
+													<option value="F" selected>Female</option>
+												<% } %>
+											</select>
+										</div>
+									</td>
+									<td colspan="2">
+										<div class="input-group mb-3"><span class="input-group-text"><strong>Guardian's Name</strong></span>
+											<input type="text" class="form-control" id="guardianname" name="guardianname" value="<%= PatientDetails.GuardianName %>">
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="5">
+										<div class="input-group mb-3">
+											<span class="input-group-text" id="basic-addon1"><strong>Disease</strong></span>
+											<select class="form-select" id="type" name="type" style="max-width: 130px;">
+												<% if(PatientDetails.Type=='G' ) { %>
+													<option value="B">Burns</option>
+													<option value="G" selected>General</option>
+												<% } else if (PatientDetails.Type=='B' ){%>
+													<option value="B" selected>Burns</option>
+													<option value="G">General</option>
+												<% } %>
+											</select>
+											<input type="text" class="form-control" id="disease" name="disease" value="<%= PatientDetails.Disease %>">
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="5">
+										<div class="input-group mb-3">
+											<span class="input-group-text" id="basic-addon1"><strong>Address</strong></span>
+											<input type="text" class="form-control" id="address" name="address" value="<%= PatientDetails.Address %>">
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="1">
+										<strong>Case No : </strong>
+										<%= PatientDetails.CaseNo %>
+									</td>
+									<td colspan="1">
+										<div class="input-group mb-3">
+											<span class="input-group-text" id="basic-addon1"><strong>Status</strong></span>
+											<select class="form-select" id="type" name="status">
+												<% if (PatientDetails.Status=="CLOSED" ) { %>
+													<option value="ACTIVE">ACTIVE</option>
+													<option value="CLOSED" selected>CLOSED</option>
+												<% } else if (PatientDetails.Status=="ACTIVE" ){%>
+													<option value="ACTIVE" selected>ACTIVE</option>
+													<option value="CLOSED">CLOSED</option>
+												<% } %>
+											</select>
+										</div>
+									</td>
+									<td colspan="1">
+										<div class="input-group mb-3">
+											<span class="input-group-text" id="basic-addon1"><strong>Phone Number</strong></span>
+											<input type="tel" class="form-control" id="phonenum" name="phonenum"
+												value="<%= PatientDetails.PhoneNumber %>" pattern="[0][3][0-4][0-9]{8}" maxlength="11">
+										</div>
+									</td>
+									<% const date=PatientDetails.FirstVisit; const [day, month, year]=date.split('-');
+										PatientDetails.FirstVisit=[year, month, day].join('-'); 
+									%>
+									<td colspan="1">
+										<div class="input-group mb-3">
+											<span class="input-group-text" id="basic-addon1"><strong>First Visit</strong></span>
+											<input type="date" class="form-control" id="firstvisit" name="firstvisit"
+												value="<%= PatientDetails.FirstVisit %>" required>
+										</div>
+									</td>
+									<td colspan="1">
+										<div class="input-group mb-3">
+											<span class="input-group-text" id="basic-addon1"><strong>Discount Mode</strong></span>
+											<select class="form-select" id="discount" name="discountmode">
+												<% if (PatientDetails.DiscountMode =="None" ) { %>
+													<option value="None" selected>None</option>
+													<option value="Zakat">Zakat</option>
+													<option value="Paid-by-other">Paid by other</option>
+													<option value="Funds">Funds</option>
+												<% } else if(PatientDetails.DiscountMode =="Zakat" ) { %>
+													<option value="None">None</option>
+													<option value="Zakat" selected>Zakat</option>
+													<option value="Paid-by-other">Paid by other</option>
+													<option value="Funds">Funds</option>
+												<% } else if(PatientDetails.DiscountMode =="Paid-by-other" ) { %>
+													<option value="None">None</option>
+													<option value="Zakat">Zakat</option>
+													<option value="Paid-by-other" selected>Paid by other</option>
+													<option value="Funds">Funds</option>
+												<% } else if(PatientDetails.DiscountMode =="Funds" ) { %>
+													<option value="None">None</option>
+													<option value="Zakat">Zakat</option>
+													<option value="Paid-by-other">Paid by other</option>
+													<option value="Funds" selected>Funds</option>
+												<% }%>
+											</select>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="wrapper">
+						<h4>Description</h4>
+						<div class="alert alert-info" role="alert">
+							This feature is under development
+						</div>
+						<!-- <textarea class="form-control-plaintext" id="DescriptionTextArea" rows="5" style="padding-left: 10px;padding-right: 5px;" placeholder="Enter Patient Description here..."></textarea> -->
+					</div>
+					<div class="d-flex justify-content-between" style="margin-top: 30px;">
+						<h4>Balance: Rs. <%= Balance %></h4><br>
+						<button type="submit" name="editDetails" value="save" class="btn btn-primary">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-square" viewBox="0 0 16 16">
+								<path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z"/>
+								<path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/>
+							</svg>
+							Save
+						</button>
+					</div>
+				</form>
+				<hr>
+			<% } %> 
+			<% if(PatientDetails.Type=='B' || PatientDetails.Type=='X') { %>
+				<div id="DressingInfo">
+					<div>
+						<% if(PatientDetails.Status=="ACTIVE") { %> 
+							
+						<% } %> 
+					</div>
+					<div class="d-flex justify-content-between" style="margin-top: 20px;">
+						<div>
+							<h4>Payment Details</h4>
+						</div>
+						<div>
+							<a href="/patient-details/payment-records?id=<%= PatientDetails.PatientID %>" type="button" class="btn btn-primary">View All Payments</a>
+						</div>
+					</div>
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Date</th>
+								<th scope="col">Dressing Charges</th>
+								<th scope="col">Ointment Charges</th>
+								<th scope="col">Product Charges</th>
+								<th scope="col">Total Amount</th>
+								<th scope="col">Discount</th>
+								<th scope="col">Amount Paid</th>
+							</tr>
+						</thead>
+						<tbody class="accordion" id="DressingRecords">
+							<% for(var i = 0; i < PaymentDetails.length; i++ ) { %> 
+								<tr class="accordion-item">
+									<% if(PaymentDetails[i].DressingCharges == null) { PaymentDetails[i].DressingCharges = 0 } %>
+									<% if(PaymentDetails[i].OintmentCharges == null) { PaymentDetails[i].OintmentCharges = 0 } %>
+									<% if(PaymentDetails[i].ProductCharges == null) { PaymentDetails[i].ProductCharges = 0 } %>
+									<% var theDate = new Date(PaymentDetails[i].Date);
+											PaymentDetails[i].Date = String(theDate.getDate()).padStart(2, '0' ) + "-" + String(theDate.getMonth() + 1).padStart(2, '0' ) + "-" + theDate.getFullYear(); %>
+									<th scope="row"><%= i+1 %></th>
+									<td><%= PaymentDetails[i].Date %></td>
+									<td><%= PaymentDetails[i].DressingCharges %></td>
+									<td><%= PaymentDetails[i].OintmentCharges %></td>
+									<td><%= PaymentDetails[i].ProductCharges %></td>
+									<td><%= PaymentDetails[i].TotalAmount %></td>
+									<td><%= PaymentDetails[i].Discount %><% if(PaymentDetails[i].DiscountOption !== null) { %> (<%= PaymentDetails[i].DiscountOption %>)<% } %></td>
+									<td><%= PaymentDetails[i].AmountPaid %></td>
+									<!-- <td>
+										<button type="submit" class="btn nav-link" onclick="DeletePayment();" name="RemovePaymentRecord" value="<%= //PaymentDetails[i].PaymentID %>" data-toggle="tooltip" data-placement="top" title="Delete Payment" style="color:red;">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+												<path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+											</svg>
+										</button>
+									</td> -->
+									<td class="accordion-header d-flex justify-content-between" id="PaymentRecord<%= i %>Details">
+										<form method="post">
+											<button class="btn nav-link" name="ReprintPayment" value="<%= PaymentDetails[i].PaymentID %>">
+												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
+													<path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
+													<path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/>
+												</svg>
+											</button>
+										</form>
+										<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= i %>" aria-expanded="false" aria-controls="collapse<%= i %>" style="max-height:10px;">
+											See Details...
+										</button>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="9">
+										<div id="collapse<%= i %>" class="accordion-collapse collapse" aria-labelledby="PaymentRecord<%= i %>Details" data-bs-parent="#PaymentRecords">
+											<div class="accordion-body" style="background-color: #F5F5F5;">
+												<% const RequiredDressingDetails = DressingDetails.filter(dressing => dressing.PaymentID === PaymentDetails[i].PaymentID); %>
+												<% if(RequiredDressingDetails.length > 0 && RequiredDressingDetails.every(dressing => dressing.QtyOfPads !== null)) { %> 
+													<table class="table table-striped">
+														<thead>
+															<th scope="col">Dressing Pads</th>
+															<th scope="col">Date</th>
+															<th scope="col">Total Amount</th>
+														</thead>
+														<tbody>
+															<% for(var j = 0; j < RequiredDressingDetails.length; j++ ) { %> 
+																<% const padQty = RequiredDressingDetails[j].QtyOfPads; %> 
+																<% var theDate = new Date(RequiredDressingDetails[j].DressingDate);
+																		const DressingDate = String(theDate.getDate()).padStart(2, '0' ) + "-" + String(theDate.getMonth() + 1).padStart(2, '0' ) + "-" + theDate.getFullYear(); %>
+																<% const TotalAmount = RequiredDressingDetails[j].TotalAmount; %>
+																<% if(padQty !== null) { %>
+																	<tr>
+																		<td><%= padQty %></td>
+																		<td><%= DressingDate %></td>
+																		<td><%= TotalAmount %></td>
+																	</tr>
+																<% } %>  
+															<% } %>
+														</tbody>
+													</table>
+												<% } %>
+												<% if(PaymentDetails[i].OintmentCharges !== 0) { %> 
+													<table class="table table-striped">
+														<thead>
+															<th>Ointment Name</th>
+															<th>Quantity</th>
+															<th>Price</th>
+															<th>Total Amount</th>
+														</thead>
+														<tbody>
+															<% for(var j = 0; j < OintmentDetails.length; j++ ) { %> 
+																<% if(OintmentDetails[j].PaymentID == PaymentDetails[i].PaymentID && OintmentDetails[j].ProductName !== null) { %>
+																	<tr>
+																		<td><%= OintmentDetails[j].ProductName %></td>
+																		<td><%= OintmentDetails[j].Quantity %></td>
+																		<td><%= OintmentDetails[j].Amount / OintmentDetails[j].Quantity %></td>
+																		<td><%= OintmentDetails[j].Amount %></td>
+																	</tr>
+																<% } %>  
+															<% } %>
+														</tbody>
+													</table>
+												<% } %>
+												<% if(PaymentDetails[i].ProductCharges !== 0) { %>
+													<table class="table table-striped">
+														<thead>
+															<th>Items Name</th>
+															<th>Quantity</th>
+															<th>Price</th>
+															<th>Total Amount</th>
+														</thead>
+														<tbody>
+															<% for(var j = 0; j < ProductDetails.length; j++ ) { %> 
+																<% if(ProductDetails[j].PaymentID == PaymentDetails[i].PaymentID && ProductDetails[j].ProductName !== null) { %>
+																	<tr>
+																		<td><%= ProductDetails[j].ProductName %></td>
+																		<td><%= ProductDetails[j].Quantity %></td>
+																		<td><%= ProductDetails[j].Amount / ProductDetails[j].Quantity %></td>
+																		<td><%= ProductDetails[j].Amount %></td>
+																	</tr>
+																<% } %>  
+															<% } %>
+														</tbody>
+													</table>
+												<% } %>
+												<!--
+												<table class="table table-striped">
+													<thead>
+														<th>Charges</th>
+														<th>Price</th>
+													</thead>
+													<tbody>
+														<tr>
+															<td>Doctor checkup fees</td>
+															<td>250</td>
+														</tr>
+														<tr>
+															<td>Injection</td>
+															<td>100</td>
+														</tr>
+														<tr>
+															<td>Home Service</td>
+															<td>850</td>
+														</tr>
+													</tbody>
+												</table>
+												-->
+											</div>
+										</div>
+									</td>
+								</tr>
+							<% } %> 
+						</tbody>
+					</table>
+				</div>
+				<hr>
+			<% } else if(PatientDetails.Type=='G' ) { %>
+				<!-- <div class="alert alert-info" role="alert">
+					This feature is under development
+				</div> -->
+				<div id="GeneralMedicineInfo">
+					<div>
+						<% //if(PatientDetails.Status=="ACTIVE") { %> 
+							<form action="/patient-details/add-general-medicine-record">
+								<button type="submit" name="addID" value="<%= //PatientDetails.PatientID %>" class="mt-10 btn btn-primary btn-lg"><svg xmlns="http://www.w3.org/2000/svg"
+										width="30" height="30" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+										<path
+											d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+									</svg>Add General Medicine Record
+								</button>
+							</form>
+						<% //} %> 
+					</div>
+					<div style="margin-top: 20px;">
+						<h4>General Medicine Details</h4>
+					</div>
+					<div class="GeneralMedicineDetails">
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col">#</th>
+									<th scope="col">Date</th>
+									<th scope="col">Medicine Amount</th>
+									<th scope="col">Total Amount</th>
+									<th scope="col">Discount</th>
+									<th scope="col">Amount Paid</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% //for(let i = 0; i < DressingInfo.length ; i += 1) { %>
+									<tr>
+										<th scope="row"><%= //i+1 %> </th>
+										<td><%= //DressingInfo[i].Date.toLocaleDateString("en-UK") %> </td>
+										<td><%= //DressingInfo[i].QtyOfPads %> </td>
+										<td><%= //DressingInfo[i].TotalAmount %> </td>
+										<td><%= //DressingInfo[i].AmountReduction %> </td>
+										<td><%= //DressingInfo[i].AmountPaid %> </td>
+									</tr>
+								<% //} %>
+							</tbody>
+						</table>
+						<a type="button" href="/patient-details/general-medicine-records?id=<%= //PatientDetails.PatientID %>" class="mt-10 btn btn-primary">
+							View All 
+							<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+								<path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+							</svg>
+						</a>
+					</div>
+				</div>
+				<hr> -->
+			<% } %>
+			<div id="AddRecords" class="d-flex justify-content-between">
+				<% if(PatientDetails.Status=="ACTIVE") { %>
+					<div style="max-width: 33%;"></div>
+					<div id="AddDressingRecord">
+						<form action="/patient-details/add-payment-record">
+							<button type="submit" name="addID" value="<%= PatientDetails.PatientID %>" class="mt-10 btn btn-primary btn-lg"><svg xmlns="http://www.w3.org/2000/svg"
+									width="30" height="30" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+									<path
+										d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+								</svg>Add Payment
+							</button>
+						</form>
+					</div>
+					<!-- <div id="AddCharges">
+						<form action="/patient-details/add-charges">
+							<button type="submit" name="addID" value="<%= //PatientDetails.PatientID %>" class="mt-10 btn btn-primary btn-lg"><svg xmlns="http://www.w3.org/2000/svg"
+									width="30" height="30" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+									<path
+										d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+								</svg>Add Charges
+							</button>
+						</form>
+					</div> -->
+					<div style="max-width: 33%;"></div>
+				<% } %> 
+			</div>
+			<hr>
+		<% } %>
+	</div>
+</body>

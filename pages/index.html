@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap-icons.css">
+  <script src="/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/styles/header.css">
+  <link rel="stylesheet" href="/styles/index.css">
+
+  <script src="/scripts/header.js" crossorigin="anonymous"></script>
+  <script src="/scripts/index.js" crossorigin="anonymous"></script>
+
+  <title>
+    Home - Chawla Clinic
+  </title>
+</head>
+
+<body>
+  <div class="container">
+    <div id="header-container"></div>
+    <div class="d-flex justify-content-start">
+      <div id="SearchPatient" style="margin-right: 150px;">
+        <h4>Search for patient</h4>
+        <form>
+          <div class="input-group mt-10">
+            <span class="input-group-text" id="addon-wrapping"><svg xmlns="http://www.w3.org/2000/svg" width="20"
+              height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+              <path
+                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+            </svg><span style="color: red;"><strong>*</strong></span></span>
+          <input type="text" class="form-control" style="max-width: 400px;" name="searchkeyword"
+            placeholder="Search keyword" aria-label="Search" aria-describedby="addon-wrapping" required>
+          <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+          </div>
+          
+          <p style="font-size:small; color: gray; font-style: italic;">This input field accepts Name, Phone Number and Case Number</p>
+          
+          <div class="">
+            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse"
+              data-bs-target="#searchFilters" aria-expanded="false" aria-controls="searchFilters">
+              Set Filters
+            </button>
+          </div>
+          <div class="search-container mt-3">
+            <div class="collapse" id="searchFilters">
+              <div class="d-flex justify-content-start">
+                <div class="mb-3">
+                  <label class="form-label fw-bold">Patient Type</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="b" id="burn-patient">
+                    <label class="form-check-label" for="burn-patient">Burns</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="g" id="general-patient">
+                    <label class="form-check-label" for="general-patient">General</label>
+                  </div>
+                </div>
+                <div class="vr mx-4"></div>
+                <div class="mb-3">
+                  <label class="form-label fw-bold">First Visit Date</label>
+                  <div class="mb-2 row">
+                    <label for="first-visit-start" class="col-sm-3 col-form-label">From</label>
+                    <div class="col-sm-8">
+                      <input type="date" class="form-control" id="first-visit-start" name="first-visit-start">
+                    </div>
+                  </div>
+                  <div class="mb-1 row">
+                    <label for="first-visit-end" class="col-sm-3 col-form-label">To</label>
+                    <div class="col-sm-8">
+                      <input type="date" class="form-control" id="first-visit-end" name="first-visit-end">
+                    </div>
+                  </div>
+                </div>
+                <div class="vr mx-4"></div>
+                <div class="mb-3">
+                  <label class="form-label fw-bold">Patient Status</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="active" id="statusActive">
+                    <label class="form-check-label" for="statusActive">Active</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="closed" id="statusInactive">
+                    <label class="form-check-label" for="statusInactive">Closed</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form><br>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Case No.</th>
+              <th scope="col">Patient Name</th>
+              <th scope="col">Mobile Number</th>
+              <th scope="col">First Visit</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <form action="get">
+                <th scope="row">
+                  <%= i+1 %>
+                </th>
+                <td>
+                  <%= searchResult[i].CaseNo %>
+                </td>
+                <td>
+                  <%= searchResult[i].PatientName %>
+                </td>
+                <td>
+                  <%= searchResult[i].PhoneNumber %>
+                </td>
+                <td>
+                  <%= date %>
+                </td>
+                <td>
+                  <%= searchResult[i].Status %>
+                </td>
+                <td><a class="btn btn-primary" href="patient-details?id=<%= searchResult[i].PatientID %> "
+                    role="button">Select</a></td>
+              </form>
+            </tr>
+          </tbody>
+        </table>
+        <div class="alert alert-danger" role="alert">
+          No Results Found
+        </div>
+      </div>
+    </div>
+    <div id="AddPatient" style="margin-top:25px">
+      <h4>Add Patient</h4>
+      <form method="POST">
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Patient's Name<span
+              style="color: red;"><strong>*</strong></span></span>
+          <input type="text" class="form-control" id="patientname" name="patientname" placeholder="Enter Patient's Name"
+            style="max-width: 400px;" required>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Age (Years)</span>
+          <input type="number" class="form-control" id="ageyears" style="max-width: 100px;" name="ageyears" value=0
+            min=0 required>
+          <span class="input-group-text" id="basic-addon1">(Months)</span>
+          <input type="number" class="form-control" id="agemonths" style="max-width: 100px;" name="agemonths" value=0
+            min=0 max=11 required>
+          <label class="input-group-text" for="gender" style="margin-left: 10px;">Gender</label>
+          <select class="form-select" id="gender" name="gender" style="max-width: 110px;">
+            <option value="M" selected>Male</option>
+            <option value="F">Female</option>
+          </select>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Guardian's Name</span>
+          <input type="text" class="form-control" id="guardianname" name="guardianname"
+            placeholder="Enter Guardian's Name" style="max-width: 400px;">
+        </div>
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="type">Patient Type</label>
+          <select class="form-select" id="type" name="type" style="max-width: 130px;" disabled>
+            <option value="B" selected>Burns</option>
+            <option value="G">General</option>
+          </select>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Disease</span>
+          <input type="text" class="form-control" id="disease" name="disease" style="max-width: 603px;"
+            placeholder="Enter Patient's Disease">
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Address</span>
+          <input type="text" class="form-control" id="address" name="address" style="max-width: 600px;"
+            placeholder="Enter Patient's Address">
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Phone Number</span>
+          <input type="tel" class="form-control" id="phonenum" name="phonenum" style="max-width: 130px;"
+            placeholder="03XXXXXXXXX" pattern="[0][3][0-4][0-9]{8}" maxlength="11">
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Case Number<span
+              style="color: red;"><strong>*</strong></span></span>
+          <input type="text" class="form-control" id="caseno" name="caseno" style="max-width: 120px;" placeholder="1234"
+            maxlength="4" required>
+          <span>
+            <div class="form-check form-switch" style="margin-left:30px;margin-top:5px;margin-right: 10px;">
+              <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
+                onclick="disableCaseNoInput()">
+              <label class="form-check-label" for="flexSwitchCheckDefault">Auto Generate</label>
+            </div>
+          </span>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">First Visit Date<span
+              style="color: red;"><strong>*</strong></span></span>
+          <input type="date" class="form-control" id="firstvisit" name="firstvisit" style="max-width: 150px;" required>
+        </div>
+        <button type="submit" class="mt-10 btn btn-primary btn-lg" name="AddPatient" value="True">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus"
+            viewBox="0 0 16 16">
+            <path
+              d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+          </svg>
+          Add Patient
+        </button>
+      </form>
+      <br><br>
+      <p><span style="color: red;"><strong>*</strong></span> required field</p>
+    </div>
+  </div>
+</body>
+
+</html>
