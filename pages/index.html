@@ -23,7 +23,7 @@
   <div class="container">
     <div id="header-container"></div>
     <div class="d-flex justify-content-start">
-      <div id="SearchPatient" style="margin-right: 150px;">
+      <div id="SearchPatient" class="w-100" style="max-width: 32.5rem;">
         <h4>Search for patient</h4>
         <form>
           <div class="input-group mt-10">
@@ -32,7 +32,7 @@
               <path
                 d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
             </svg><span style="color: red;"><strong>*</strong></span></span>
-          <input type="text" class="form-control" style="max-width: 400px;" name="searchkeyword"
+          <input type="text" class="form-control" name="searchkeyword"
             placeholder="Search keyword" aria-label="Search" aria-describedby="addon-wrapping" required>
           <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
           </div>
@@ -51,13 +51,19 @@
                 <div class="mb-3">
                   <label class="form-label fw-bold">Patient Type</label>
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="b" id="burn-patient">
+                    <input class="form-check-input" type="radio" value="b" name="patient-type" id="burn-patient">
                     <label class="form-check-label" for="burn-patient">Burns</label>
                   </div>
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="g" id="general-patient">
+                    <input class="form-check-input" type="radio" value="g" name="patient-type" id="general-patient">
                     <label class="form-check-label" for="general-patient">General</label>
                   </div>
+                  <a href="#" class="btn-link" style="color: grey; text-decoration: none; font-size: smaller;" onclick="clearSelection('patient-type')">
+                    Clear 
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                    </svg>
+                  </a>
                 </div>
                 <div class="vr mx-4"></div>
                 <div class="mb-3">
@@ -79,19 +85,25 @@
                 <div class="mb-3">
                   <label class="form-label fw-bold">Patient Status</label>
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="active" id="statusActive">
+                    <input class="form-check-input" type="radio" name="patient-status" value="active" id="statusActive">
                     <label class="form-check-label" for="statusActive">Active</label>
                   </div>
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="closed" id="statusInactive">
+                    <input class="form-check-input" type="radio" name="patient-status" value="closed" id="statusInactive">
                     <label class="form-check-label" for="statusInactive">Closed</label>
                   </div>
+                  <a href="#" class="btn-link" style="color: grey; text-decoration: none; font-size: smaller;" onclick="clearSelection('patient-status')">
+                    Clear 
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                    </svg>
+                  </a>
                 </div>
               </div>
             </div>
           </div>
         </form><br>
-        <table class="table">
+        <table class="table d-none" id="search-result-table">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -129,7 +141,22 @@
             </tr>
           </tbody>
         </table>
-        <div class="alert alert-danger" role="alert">
+        <nav aria-label="..." class="d-none">
+          <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true" id="pagination-prev">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#" id="pagination-page-1">1</a></li>
+            <li class="page-item active" aria-current="page" id="pagination-page-2">
+              <a class="page-link" href="#">2</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#" id="pagination-page-3">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#" id="pagination-next">Next</a>
+            </li>
+          </ul>
+        </nav>
+        <div class="alert alert-danger d-none" role="alert" id="search-result-not-found">
           No Results Found
         </div>
       </div>
@@ -144,14 +171,17 @@
             style="max-width: 400px;" required>
         </div>
         <div class="input-group mb-3">
-          <span class="input-group-text" id="basic-addon1">Age (Years)</span>
-          <input type="number" class="form-control" id="ageyears" style="max-width: 100px;" name="ageyears" value=0
+          <span class="input-group-text">Age</span>
+          <span class="input-group-text" id="basic-addon1">(Years)</span>
+          <input type="number" class="form-control" id="ageyears" style="max-width: 6.25rem;min-width: 3rem;" name="ageyears" value=0
             min=0 required>
           <span class="input-group-text" id="basic-addon1">(Months)</span>
-          <input type="number" class="form-control" id="agemonths" style="max-width: 100px;" name="agemonths" value=0
+          <input type="number" class="form-control" id="agemonths" style="max-width: 6.25rem;min-width: 3rem;" name="agemonths" value=0
             min=0 max=11 required>
-          <label class="input-group-text" for="gender" style="margin-left: 10px;">Gender</label>
-          <select class="form-select" id="gender" name="gender" style="max-width: 110px;">
+        </div>
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="gender">Gender</label>
+          <select class="form-select" id="gender" name="gender" style="width: 6.25rem;max-width: 6.875rem;">
             <option value="M" selected>Male</option>
             <option value="F">Female</option>
           </select>
@@ -163,7 +193,7 @@
         </div>
         <div class="input-group mb-3">
           <label class="input-group-text" for="type">Patient Type</label>
-          <select class="form-select" id="type" name="type" style="max-width: 130px;" disabled>
+          <select class="form-select" id="type" name="type" style="max-width: 130px;">
             <option value="B" selected>Burns</option>
             <option value="G">General</option>
           </select>
@@ -189,9 +219,10 @@
           <input type="text" class="form-control" id="caseno" name="caseno" style="max-width: 120px;" placeholder="1234"
             maxlength="4" required>
           <span>
-            <div class="form-check form-switch" style="margin-left:30px;margin-top:5px;margin-right: 10px;">
-              <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
-                onclick="disableCaseNoInput()">
+            <div class="form-check form-switch" style="margin-left:30px;margin-top:5px;margin-right: 10px;"
+              onclick="disabledFunctionality()">
+              <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" disabled
+                onclick="">
               <label class="form-check-label" for="flexSwitchCheckDefault">Auto Generate</label>
             </div>
           </span>
