@@ -30,6 +30,27 @@ function cleanObject(obj) {
   return obj;
 }
 
+function createPaginationButton(text, pageNumber, isActive, isDisabled, container) {
+  var li = document.createElement('li');
+  li.className = 'page-item' + (isActive ? ' active' : '');
+  li.className += isDisabled ? ' disabled' : '';
+
+  var link = document.createElement('a');
+  link.className = 'page-link';
+  link.href = '#';
+  link.innerText = text;
+
+  link.setAttribute('data-page', pageNumber);
+
+  li.appendChild(link);
+  container.appendChild(li);
+
+  link.addEventListener('click', function () {
+    var clickedPage = parseInt(link.getAttribute('data-page'));
+    console.log('Clicked page:', clickedPage);
+  });
+}
+
 $(document).ready(function () {
   $("#search-patient").on("click", function () {
     $("#search-patient")
@@ -72,55 +93,84 @@ $(document).ready(function () {
           success: function (response) {
             console.log("API Response:", response);
 
-            var table = document.getElementById("searchResultTable");
-            table.classList.remove('d-none');
-
-            var tableBody = document.getElementById("searchResultTableBody");
-            
-            for(let i = 0; i < response.length; i++) {
-              var row = tableBody.insertRow(i);
-
-              var cellNumber = row.insertCell(0);
-              var cellCaseNo = row.insertCell(1);
-              var cellPatientName = row.insertCell(2);
-              var cellPhoneNumber = row.insertCell(3);
-              var cellDate = row.insertCell(4);
-              var cellStatus = row.insertCell(5);
-              var cellActions = row.insertCell(6);
-
-              cellNumber.innerHTML = i + 1;
-              cellCaseNo.innerHTML = response[i].caseNo;
-              cellPatientName.innerHTML = response[i].name;
-              cellPhoneNumber.innerHTML = response[i].phoneNumber;
-              cellDate.innerHTML = new Date(response[i].firstVisit).toLocaleDateString('en-GB', {
-                day: 'numeric',
-                month: 'numeric',
-                year: 'numeric'
-              });
-              cellStatus.innerHTML = response[i].status;
-
-              var selectLink = document.createElement('a');
-              selectLink.href = 'patient.html?id=' + response[i].patientId;
-              selectLink.className = 'btn btn-primary';
-              selectLink.innerHTML = 'Select';
-
-              cellActions.appendChild(selectLink);
+            if(response.items.length > 0) {
+              document.getElementById("searchResultNotFound").classList.add('d-none');
+              document.getElementById("searchResultTable").classList.remove('d-none');
+  
+              var tableBody = document.getElementById("searchResultTableBody");
+  
+              while (tableBody.firstChild) {
+                tableBody.removeChild(tableBody.firstChild);
+              }
+  
+              for (let i = 0; i < response.items.length; i++) {
+                var row = tableBody.insertRow(i);
+  
+                var cellNumber = row.insertCell(0);
+                var cellCaseNo = row.insertCell(1);
+                var cellPatientName = row.insertCell(2);
+                var cellPhoneNumber = row.insertCell(3);
+                var cellDate = row.insertCell(4);
+                var cellStatus = row.insertCell(5);
+                var cellActions = row.insertCell(6);
+  
+                cellNumber.innerHTML = i + 1;
+                cellCaseNo.innerHTML = response.items[i].caseNo;
+                cellPatientName.innerHTML = response.items[i].name;
+                cellPhoneNumber.innerHTML = response.items[i].phoneNumber;
+                cellDate.innerHTML = new Date(response.items[i].firstVisit).toLocaleDateString('en-GB', {
+                  day: 'numeric',
+                  month: 'numeric',
+                  year: 'numeric'
+                });
+                cellStatus.innerHTML = response.items[i].status;
+  
+                var selectLink = document.createElement('a');
+                selectLink.href = 'patient.html?id=' + response.items[i].patientId;
+                selectLink.className = 'btn btn-primary';
+                selectLink.innerHTML = 'Select';
+  
+                cellActions.appendChild(selectLink);
+              }
+  
+              var currentPage = response.pageNumber;
+              var maxPagesToShow = 2;
+              var totalPages = response.totalPages;
+  
+              var paginationContainer = document.getElementById("searchPaginationContainer");
+              paginationContainer.parentNode.classList.remove('d-none');
+              paginationContainer.innerHTML = '';
+  
+              var startPage = Math.max(1, currentPage - maxPagesToShow);
+              var endPage = Math.min(totalPages, currentPage + maxPagesToShow);
+  
+              createPaginationButton('Previous', currentPage > 1 ? currentPage - 1 : 1, false, currentPage === 1, paginationContainer);
+  
+              for (var i = startPage; i <= endPage; i++) {
+                createPaginationButton(i, i, i === currentPage, false, paginationContainer);
+              }
+  
+              createPaginationButton('Next', currentPage < totalPages ? currentPage + 1 : totalPages, false, currentPage === totalPages, paginationContainer);
+            } else {
+              document.getElementById("searchResultTable").classList.add('d-none');
+              document.getElementById("searchPaginationContainer").parentNode.classList.add('d-none');
+              document.getElementById("searchResultNotFound").classList.remove('d-none');
             }
-            
+
             $("#search-patient").prop("disabled", false).append("Search");
             $("#search-loading").addClass("d-none");
           },
-          error: function (error) {
-            console.error("Error:", error);
+          error: function (xhr, status, error) {
             $("#search-patient").prop("disabled", false).append("Search");
             $("#search-loading").addClass("d-none");
-          },
+
+            alert("There was an error in retrieving search results.");
+          }
         });
 
       },
       error: function (error) {
-        console.error("Error:", error);
-
+        alert("Error retrieving configuration.");
         $("#search-patient").prop("disabled", false).append("Search");
         $("#search-loading").addClass("d-none");
       },
