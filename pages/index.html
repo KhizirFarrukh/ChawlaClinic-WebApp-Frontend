@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="/bootstrap/css/bootstrap-icons.css">
   <script src="/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
   <link rel="stylesheet" href="/styles/header.css">
   <link rel="stylesheet" href="/styles/index.css">
 
@@ -32,9 +34,9 @@
               <path
                 d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
             </svg><span style="color: red;"><strong>*</strong></span></span>
-          <input type="text" class="form-control" name="searchkeyword"
+          <input type="text" class="form-control" name="searchkeyword" id="searchParam"
             placeholder="Search keyword" aria-label="Search" aria-describedby="addon-wrapping" required>
-          <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+          <button class="btn btn-outline-secondary" type="button" id="search-patient">Search</button>
           </div>
           
           <p style="font-size:small; color: gray; font-style: italic;">This input field accepts Name, Phone Number and Case Number</p>
