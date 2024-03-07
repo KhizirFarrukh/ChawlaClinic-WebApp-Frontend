@@ -69,16 +69,54 @@ $(document).ready(function () {
           url: configData.apiUrl + "?" + queryString,
           type: "GET",
           dataType: "json",
-          success: function (apiResponse) {
-            console.log("API Response:", apiResponse);
+          success: function (response) {
+            console.log("API Response:", response);
+
+            var table = document.getElementById("searchResultTable");
+            table.classList.remove('d-none');
+
+            var tableBody = document.getElementById("searchResultTableBody");
+            
+            for(let i = 0; i < response.length; i++) {
+              var row = tableBody.insertRow(i);
+
+              var cellNumber = row.insertCell(0);
+              var cellCaseNo = row.insertCell(1);
+              var cellPatientName = row.insertCell(2);
+              var cellPhoneNumber = row.insertCell(3);
+              var cellDate = row.insertCell(4);
+              var cellStatus = row.insertCell(5);
+              var cellActions = row.insertCell(6);
+
+              cellNumber.innerHTML = i + 1;
+              cellCaseNo.innerHTML = response[i].caseNo;
+              cellPatientName.innerHTML = response[i].name;
+              cellPhoneNumber.innerHTML = response[i].phoneNumber;
+              cellDate.innerHTML = new Date(response[i].firstVisit).toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'numeric',
+                year: 'numeric'
+              });
+              cellStatus.innerHTML = response[i].status;
+
+              var selectLink = document.createElement('a');
+              selectLink.href = 'patient.html?id=' + response[i].patientId;
+              selectLink.className = 'btn btn-primary';
+              selectLink.innerHTML = 'Select';
+
+              cellActions.appendChild(selectLink);
+            }
+            
+            $("#search-patient").prop("disabled", false).append("Search");
+            $("#search-loading").addClass("d-none");
           },
           error: function (error) {
             console.error("Error:", error);
+            $("#search-patient").prop("disabled", false).append("Search");
+            $("#search-loading").addClass("d-none");
           },
         });
 
-        $("#search-patient").prop("disabled", false).append("Search");
-        $("#search-loading").addClass("d-none");
       },
       error: function (error) {
         console.error("Error:", error);
