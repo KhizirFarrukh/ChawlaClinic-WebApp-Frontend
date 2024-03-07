@@ -36,7 +36,13 @@
             </svg><span style="color: red;"><strong>*</strong></span></span>
           <input type="text" class="form-control" name="searchkeyword" id="searchParam"
             placeholder="Search keyword" aria-label="Search" aria-describedby="addon-wrapping" required>
-          <button class="btn btn-outline-secondary" type="button" id="search-patient">Search</button>
+          <button class="btn btn-outline-secondary" type="button" id="search-patient">
+            Search
+            <div class="d-none spinner-border spinner-border-sm" id="search-loading" role="status">
+              <span class="visually-hidden" >Searching...</span>
+            </div>
+          </button>
+          
           </div>
           
           <p style="font-size:small; color: gray; font-style: italic;">This input field accepts Name, Phone Number and Case Number</p>
