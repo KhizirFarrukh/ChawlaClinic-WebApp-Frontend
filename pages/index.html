@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="/styles/header.css">
   <link rel="stylesheet" href="/styles/index.css">
 
+  <script src="/scripts/common.js" crossorigin="anonymous"></script>
   <script src="/scripts/header.js" crossorigin="anonymous"></script>
   <script src="/scripts/index.js" crossorigin="anonymous"></script>
 
@@ -159,31 +160,6 @@
           </thead>
           <tbody id="searchResultTableBody">
             <tr>
-              <form action="get">
-                <th scope="row">
-                  <%= i+1 %>
-                </th>
-                <td>
-                  <%= searchResult[i].CaseNo %>
-                </td>
-                <td>
-                  <%= searchResult[i].PatientName %>
-                </td>
-                <td>
-                  <%= searchResult[i].GuardianName %>
-                </td>
-                <td>
-                  <%= searchResult[i].PhoneNumber %>
-                </td>
-                <td>
-                  <%= date %>
-                </td>
-                <td>
-                  <%= searchResult[i].Status %>
-                </td>
-                <td><a class="btn btn-primary" href="patient-details?id=<%= searchResult[i].PatientID %> "
-                    role="button">Select</a></td>
-              </form>
             </tr>
           </tbody>
         </table>
