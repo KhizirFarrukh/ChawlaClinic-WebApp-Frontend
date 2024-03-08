@@ -27,7 +27,7 @@
     <div class="d-flex justify-content-start">
       <div id="SearchPatient" class="w-100">
         <h4>Search for patient</h4>
-        <form>
+        <div>
           <div class="input-group mt-10"  style="max-width: 30rem;">
             <span class="input-group-text" id="addon-wrapping"><svg xmlns="http://www.w3.org/2000/svg" width="20"
               height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -59,11 +59,11 @@
                 <div class="mb-3">
                   <label class="form-label fw-bold">Patient Type</label>
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" value="b" name="patient-type" id="burn-patient">
+                    <input class="form-check-input" type="radio" value="B" name="patient-type" id="burn-patient">
                     <label class="form-check-label" for="burn-patient">Burns</label>
                   </div>
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" value="g" name="patient-type" id="general-patient">
+                    <input class="form-check-input" type="radio" value="G" name="patient-type" id="general-patient">
                     <label class="form-check-label" for="general-patient">General</label>
                   </div>
                   <a href="#" class="btn-link" style="color: grey; text-decoration: none; font-size: smaller;" onclick="clearSelection('patient-type')">
@@ -93,12 +93,12 @@
                 <div class="mb-3">
                   <label class="form-label fw-bold">Patient Status</label>
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="patient-status" value="active" id="statusActive">
+                    <input class="form-check-input" type="radio" name="patient-status" value="Active" id="statusActive">
                     <label class="form-check-label" for="statusActive">Active</label>
                   </div>
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="patient-status" value="closed" id="statusInactive">
-                    <label class="form-check-label" for="statusInactive">Closed</label>
+                    <input class="form-check-input" type="radio" name="patient-status" value="Closed" id="statusClosed">
+                    <label class="form-check-label" for="statusClosed">Closed</label>
                   </div>
                   <a href="#" class="btn-link" style="color: grey; text-decoration: none; font-size: smaller;" onclick="clearSelection('patient-status')">
                     Clear 
@@ -113,19 +113,20 @@
                   <div class="mb-3">
                     <label for="searchResultSize" class="form-label">Results per page</label>
                     <select class="form-select" id="searchResultSize" style="width: 5rem;">
-                      <option>10</option>
-                      <option>20</option>
-                      <option>50</option>
-                      <option>100</option>
+                      <option value="10" selected>10</option>
+                      <option value="20">20</option>
+                      <option value="50">50</option>
+                      <option value="100">100</option>
                    </select>
                   </div>
                   <div class="mb-3">
                     <label for="searchSortByField" class="form-label">Sort by</label>
-                    <div id="searchSortByField" class="d-flex align-items-center">
-                      <select class="form-select" style="margin-right: 1rem;">
-                        <option>Case Number</option>
-                        <option>Name</option>
-                        <option>Mobile Number</option>
+                    <div class="d-flex align-items-center">
+                      <select id="searchSortByField" class="form-select" style="margin-right: 1rem;">
+                        <option value="CaseNo">Case Number</option>
+                        <option value="Name">Name</option>
+                        <option value="PhoneNumber">Mobile Number</option>
+                        <option value="FirstVisit">First Visit</option>
                      </select>
                      <button id="toggleSortButton" type="button" class="btn btn-light">
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sort-down" viewBox="0 0 20 20">
@@ -143,13 +144,14 @@
               </div>
             </div>
           </div>
-        </form><br>
+        </div><br>
         <table class="table d-none" id="searchResultTable">
           <thead>
             <tr>
               <th scope="col">#</th>
               <th scope="col">Case No.</th>
               <th scope="col">Patient Name</th>
+              <th scope="col">Guardian Name</th>
               <th scope="col">Mobile Number</th>
               <th scope="col">First Visit</th>
               <th scope="col">Status</th>
@@ -166,6 +168,9 @@
                 </td>
                 <td>
                   <%= searchResult[i].PatientName %>
+                </td>
+                <td>
+                  <%= searchResult[i].GuardianName %>
                 </td>
                 <td>
                   <%= searchResult[i].PhoneNumber %>
@@ -198,7 +203,7 @@
           </ul>
           <p class="d-flex justify-content-center text-muted small font-italic">Showing&nbsp;<span id="searchResultRangeText"></span>&nbsp;of&nbsp;<span id="searchResultCountText"></span>&nbsp;results.</p>
         </nav>
-        <div class="alert alert-danger d-none" role="alert" id="searchResultNotFound">
+        <div class="alert alert-danger d-flex justify-content-center d-none" role="alert" id="searchResultNotFound">
           No Results Found
         </div>
       </div>
