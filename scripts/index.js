@@ -151,6 +151,12 @@ $(document).ready(function () {
               }
   
               createPaginationButton('Next', currentPage < totalPages ? currentPage + 1 : totalPages, false, currentPage === totalPages, paginationContainer);
+
+              var countBeforeCurrentPage = (currentPage - 1) * response.pageSize;
+
+              document.getElementById("searchResultRangeText").innerText = (countBeforeCurrentPage + 1) + '-' + (countBeforeCurrentPage + response.items.length);
+              document.getElementById("searchResultCountText").innerText = response.totalCount;
+
             } else {
               document.getElementById("searchResultTable").classList.add('d-none');
               document.getElementById("searchPaginationContainer").parentNode.classList.add('d-none');

@@ -25,10 +25,10 @@
   <div class="container">
     <div id="header-container"></div>
     <div class="d-flex justify-content-start">
-      <div id="SearchPatient" class="w-100" style="max-width: 32.5rem;">
+      <div id="SearchPatient" class="w-100">
         <h4>Search for patient</h4>
         <form>
-          <div class="input-group mt-10">
+          <div class="input-group mt-10"  style="max-width: 30rem;">
             <span class="input-group-text" id="addon-wrapping"><svg xmlns="http://www.w3.org/2000/svg" width="20"
               height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
               <path
@@ -55,7 +55,7 @@
           </div>
           <div class="search-container mt-3">
             <div class="collapse" id="searchFilters">
-              <div class="d-flex justify-content-start">
+              <div class="d-flex justify-content-start" style="width: 50rem; max-width: 100%; overflow-x: auto;">
                 <div class="mb-3">
                   <label class="form-label fw-bold">Patient Type</label>
                   <div class="form-check">
@@ -107,6 +107,39 @@
                     </svg>
                   </a>
                 </div>
+                <div class="vr mx-4"></div>
+                <div class="mb-3">
+                  <label class="form-label fw-bold">Pagination</label>
+                  <div class="mb-3">
+                    <label for="searchResultSize" class="form-label">Results per page</label>
+                    <select class="form-select" id="searchResultSize" style="width: 5rem;">
+                      <option>10</option>
+                      <option>20</option>
+                      <option>50</option>
+                      <option>100</option>
+                   </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="searchSortByField" class="form-label">Sort by</label>
+                    <div id="searchSortByField" class="d-flex align-items-center">
+                      <select class="form-select" style="margin-right: 1rem;">
+                        <option>Case Number</option>
+                        <option>Name</option>
+                        <option>Mobile Number</option>
+                     </select>
+                     <button id="toggleSortButton" type="button" class="btn btn-light">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sort-down" viewBox="0 0 20 20">
+                        <path d="M3.5 2.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 11.293zm3.5 1a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
+                      </svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sort-up-alt" viewBox="0 0 20 20">
+                        <path d="M3.5 13.5a.5.5 0 0 1-1 0V4.707L1.354 5.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.5.5 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L3.5 4.707zm4-9.5a.5.5 0 0 1 0-1h1a.5.5 0 0 1 0 1zm0 3a.5.5 0 0 1 0-1h3a.5.5 0 0 1 0 1zm0 3a.5.5 0 0 1 0-1h5a.5.5 0 0 1 0 1zM7 12.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5"/>
+                      </svg>
+                  </button>
+                     
+                    </div>
+                    
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -150,7 +183,7 @@
           </tbody>
         </table>
         <nav aria-label="..." class="d-none">
-          <ul class="pagination justify-content-center" id="searchPaginationContainer">
+          <ul class="pagination justify-content-center mb-1" id="searchPaginationContainer">
             <li class="page-item disabled">
               <a class="page-link" href="#" tabindex="-1" aria-disabled="true" id="pagination-prev">Previous</a>
             </li>
@@ -163,6 +196,7 @@
               <a class="page-link" href="#" id="pagination-next">Next</a>
             </li>
           </ul>
+          <p class="d-flex justify-content-center text-muted small font-italic">Showing&nbsp;<span id="searchResultRangeText"></span>&nbsp;of&nbsp;<span id="searchResultCountText"></span>&nbsp;results.</p>
         </nav>
         <div class="alert alert-danger d-none" role="alert" id="searchResultNotFound">
           No Results Found
