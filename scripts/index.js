@@ -83,7 +83,7 @@ function searchData(pageNumber) {
         Size: $("#searchResultSize").val(),
         Page: pageNumber,
         IsAscending: true,
-        SortColumn: $("#searchSortByField").val()
+        SortColumn: $("#searchSortByField").val(),
       };
 
       requestData = cleanObject(requestData);
@@ -101,9 +101,9 @@ function searchData(pageNumber) {
             document
               .getElementById("searchResultNotFound")
               .classList.add("d-none");
-            document
-              .getElementById("searchResultTable")
-              .classList.remove("d-none");
+            var table = document.getElementById("searchResultTable");
+
+            table.classList.remove("d-none");
 
             var tableBody = document.getElementById("searchResultTableBody");
 
@@ -194,6 +194,8 @@ function searchData(pageNumber) {
               (countBeforeCurrentPage + response.items.length);
             document.getElementById("searchResultCountText").innerText =
               response.totalCount;
+
+            table.scrollIntoView({ behavior: "smooth" });
           } else {
             document
               .getElementById("searchResultTable")
