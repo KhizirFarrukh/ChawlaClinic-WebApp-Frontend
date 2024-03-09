@@ -31,74 +31,69 @@
       <div class="spinner-border" role="status">
       </div>
     </div>
-    <h3 class="d-none">No record found</h3>
+    <h3 id="patientNotFound" class="d-none d-flex justify-content-center">No record found</h3>
     <div id="patientData" class="d-none">
       <div id="BasicInfo">
         <table class="table table-striped table-bordered">
           <tbody>
             <tr>
-              <td colspan="5"><strong>Patient Name : </strong>
-                Test Name
+              <td colspan="5"><strong>Patient Name: </strong>
+                <span id="patientName"></span>
               </td>
             </tr>
             <tr>
-              <td colspan="1"><strong>Age : </strong>
-                1 years, 1 months
+              <td colspan="1"><strong>Age: </strong>
+                <span id="age"></span>
               </td>
-              <td colspan="1"><strong>Gender : </strong>
-                Male
+              <td colspan="1"><strong>Gender: </strong>
+                <span id="gender"></span>
               </td>
-              <td colspan="3"><strong>Guardian's Name : </strong>
-                Test
-              </td>
-            </tr>
-            <tr>
-              <td colspan="5"><strong>Disease : (Burns) </strong>
-                Test Disease
+              <td colspan="3"><strong>Guardian's Name: </strong>
+                <span id="guardianName"></span>
               </td>
             </tr>
             <tr>
-              <td colspan="5"><strong>Address : </strong>
-                Test
+              <td colspan="5"><strong>Disease: (<span id="patientType"></span>) </strong>
+                <span id="disease"></span>
               </td>
             </tr>
             <tr>
-              <td colspan="1"><strong>Case No : </strong>
-                24B-012345
+              <td colspan="5"><strong>Address: </strong>
+                <span id="address"></span>
               </td>
-              <td colspan="1"><strong>Status : <span style="color:green">ACTIVE</span> </td>
+            </tr>
+            <tr>
+              <td colspan="1"><strong>Case No: </strong>
+                <span id="caseNo"></span>
+              </td>
+              <td colspan="1"><strong>Status : <span id="status" style="color:green"></span> </td>
               <td colspan="1"><strong>Phone Number : </strong>
-                0300-1234567
+                <span id="phoneNumber"></span>
               </td>
               <td colspan="1"><strong>First Visit : </strong>
-                08/03/2024
+                <span id="firstVisit"></span>
               </td>
-              <td colspan="1"><strong>Discount Mode : </strong>None</td>
+              <td colspan="1"><strong>Discount Mode : </strong><span id="discountMode"></span></td>
             </tr>
           </tbody>
         </table>
       </div>
-      <!-- <div class="wrapper">
+      <div class="wrapper">
 					<h4>Description</h4>
-					<div class="alert alert-info" role="alert">
-						This feature is under development
-					</div>
-					<textarea class="form-control-plaintext" id="DescriptionTextAreaReadOnly" rows="5" readonly style="padding-left: 10px;padding-right: 5px;" placeholder="Enter Patient Description here..."></textarea>
-				</div> -->
-    <div class="d-flex justify-content-between" style="margin-top: 30px;">
-      <h4>Balance: Rs. 103,500</h4>
-      <form method="POST">
-        <button type="submit" name="editDetails" value="edit" class="btn btn-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square"
-            viewBox="0 0 16 16">
-            <path
-              d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-            <path fill-rule="evenodd"
-              d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-          </svg>
-          Edit
-        </button>
-      </form>
+					<textarea class="form-control" id="descriptionReadOnly" rows="5" readonly style="padding-left: 10px;padding-right: 5px;"></textarea>
+				</div>
+    <div class="d-flex justify-content-end" style="margin-top: 30px;">
+      <!-- <h4>Balance: Rs. 123456</h4> -->
+      <button type="button" id="editPatient" onclick="PatientEditMode()" class="btn btn-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square"
+          viewBox="0 0 16 16">
+          <path
+            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+          <path fill-rule="evenodd"
+            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+        </svg>
+        Edit
+      </button>
     </div>
     <hr>
     <form method="POST" style="margin-top: 15px;">
@@ -114,117 +109,112 @@
       <button type="submit" name="deposit" value="deposit" class="btn btn-primary"> Deposit</button>
     </form>
     <hr>
-    <form method="POST">
-      <div id="BasicInfo">
-        <table class="table table-striped table-bordered">
-          <tbody>
-            <tr>
-              <td colspan="6">
-                <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1"><strong>Patient's
-                      Name</strong></span>
-                  <input type="text" class="form-control" id="patientname" name="patientname" value="" required>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <div class="input-group mb-3">
-                  <span class="input-group-text"><strong>Age (years)</strong></span>
-                  <input type="number" class="form-control" id="ageyears" name="ageyears" value=0 min=0 required>
-                  <span class="input-group-text"><strong>(months)</strong></span>
-                  <input type="number" class="form-control" id="agemonths" name="agemonths" value=0 min=0 max=11
-                    required>
-                </div>
-              </td>
-              <td colspan="1">
-                <div class="input-group mb-3">
-                  <label class="input-group-text" for="gender"
-                    style="margin-left: 10px;"><strong>Gender</strong></label>
-                  <select class="form-select" id="gender" name="gender">
-                    <option value="M" selected>Male</option>
-                    <option value="F">Female</option>
-                  </select>
-                </div>
-              </td>
-              <td colspan="2">
-                <div class="input-group mb-3"><span class="input-group-text"><strong>Guardian's Name</strong></span>
-                  <input type="text" class="form-control" id="guardianname" name="guardianname" value="">
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="5">
-                <div class="input-group mb-3">
-                  <span class="input-group-text" id="basic-addon1"><strong>Disease</strong></span>
-                  <select class="form-select" id="type" name="type" style="max-width: 130px;">
-                    <option value="B">Burns</option>
-                    <option value="G" selected>General</option>
-                  </select>
-                  <input type="text" class="form-control" id="disease" name="disease" value="">
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="5">
-                <div class="input-group mb-3">
-                  <span class="input-group-text" id="basic-addon1"><strong>Address</strong></span>
-                  <input type="text" class="form-control" id="address" name="address" value="">
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="1">
-                <strong>Case No : </strong>
-                24B-012345
-              </td>
-              <td colspan="1">
-                <div class="input-group mb-3">
-                  <span class="input-group-text" id="basic-addon1"><strong>Status</strong></span>
-                  <select class="form-select" id="type" name="status">
-                    <option value="Active">ACTIVE</option>
-                    <option value="Closed" selected>CLOSED</option>
-                  </select>
-                </div>
-              </td>
-              <td colspan="1">
-                <div class="input-group mb-3">
-                  <span class="input-group-text" id="basic-addon1"><strong>Phone Number</strong></span>
-                  <input type="tel" class="form-control" id="phonenum" name="phonenum" value=""
-                    pattern="[0][3][0-4][0-9]{8}" maxlength="11">
-                </div>
-              </td>
-              <td colspan="1">
-                <div class="input-group mb-3">
-                  <span class="input-group-text" id="basic-addon1"><strong>First Visit</strong></span>
-                  <input type="date" class="form-control" id="firstvisit" name="firstvisit" value="" required>
-                </div>
-              </td>
-              <td colspan="1">
-                <div class="input-group mb-3">
-                  <span class="input-group-text" id="basic-addon1"><strong>Discount Mode</strong></span>
-                  <select class="form-select" id="discount" name="discountmode">
-                    <option value="None" selected>None</option>
-                    <option value="Zakat">Zakat</option>
-                    <option value="Paid-by-other">Paid by other</option>
-                    <option value="Funds">Funds</option>
-                  </select>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="wrapper">
-        <h4>Description</h4>
-        <div class="alert alert-info" role="alert">
-          This feature is under development
-        </div>
-        <textarea class="form-control-plaintext" id="DescriptionTextArea" rows="5"
-          style="padding-left: 10px;padding-right: 5px;" placeholder="Enter Patient Description here..."></textarea>
-      </div>
-      <div class="d-flex justify-content-between" style="margin-top: 30px;">
-        <h4>Balance: Rs. 103,500</h4><br>
-        <button type="submit" name="editDetails" value="save" class="btn btn-primary">
+    <div id="PatientEditing">
+      <table class="table table-striped table-bordered">
+        <tbody>
+          <tr>
+            <td colspan="6">
+              <div class="input-group"><span class="input-group-text" id="basic-addon1"><strong>Patient's
+                    Name</strong></span>
+                <input type="text" class="form-control" id="patientNameEdit">
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <div class="input-group">
+                <span class="input-group-text"><strong>Age (years)</strong></span>
+                <input type="number" class="form-control" id="ageYearsEdit" min=0>
+                <span class="input-group-text"><strong>(months)</strong></span>
+                <input type="number" class="form-control" id="ageMonthsEdit" min=0 max=11>
+              </div>
+            </td>
+            <td colspan="1">
+              <div class="input-group">
+                <label class="input-group-text" for="gender"
+                  style="margin-left: 10px;"><strong>Gender</strong></label>
+                <select class="form-select" id="genderEdit" >
+                  <option value="M" selected>Male</option>
+                  <option value="F">Female</option>
+                </select>
+              </div>
+            </td>
+            <td colspan="2">
+              <div class="input-group"><span class="input-group-text"><strong>Guardian's Name</strong></span>
+                <input type="text" class="form-control" id="guardianNameEdit">
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="5">
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon1"><strong>Disease</strong></span>
+                <select class="form-select" id="patientTypeEdit" style="max-width: 130px;">
+                  <option value="B" selected>Burns</option>
+                  <option value="G">General</option>
+                </select>
+                <input type="text" class="form-control" id="diseaseEdit">
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="5">
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon1"><strong>Address</strong></span>
+                <input type="text" class="form-control" id="addressEdit">
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="1">
+              <strong>Case No : </strong>
+              <span id="caseNoEdit"></span>
+            </td>
+            <td colspan="1">
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon1"><strong>Status</strong></span>
+                <select class="form-select" id="statusEdit">
+                  <option value="Active" selected>ACTIVE</option>
+                  <option value="Closed">CLOSED</option>
+                </select>
+              </div>
+            </td>
+            <td colspan="1">
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon1"><strong>Phone Number</strong></span>
+                <input type="tel" class="form-control" id="phoneNumberEdit"
+                  pattern="[0][3][0-4][0-9]{8}" maxlength="11">
+              </div>
+            </td>
+            <td colspan="1">
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon1"><strong>First Visit</strong></span>
+                <input type="date" class="form-control" id="firstVisitEdit">
+              </div>
+            </td>
+            <td colspan="1">
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon1"><strong>Discount Mode</strong></span>
+                <select class="form-select" id="discountModeEdit">
+                  <option value="1" selected>None</option>
+                  <option value="2">Funds</option>
+                  <option value="3">Zakat</option>
+                  <option value="4">Paid by someone</option>
+                </select>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="wrapper">
+      <h4>Description</h4>
+      <textarea class="form-control" id="descriptionEdit" rows="5"
+        style="padding-left: 10px;padding-right: 5px;" placeholder="Enter Patient Description here..."></textarea>
+    </div>
+      <div class="d-flex justify-content-end" style="margin-top: 30px;">
+        <!-- <h4>Balance: Rs. 123,456</h4><br> -->
+        <button type="button" id="savePatient" class="btn btn-primary">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-square"
             viewBox="0 0 16 16">
             <path
@@ -235,7 +225,6 @@
           Save
         </button>
       </div>
-    </form>
     <hr>
     <div id="PaymentInfo">
       <div>
