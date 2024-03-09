@@ -98,6 +98,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (response === undefined || response === null || response.totalCount === 0) {
                   document.getElementById("paymentRecordsNotFound").classList.remove('d-none');
                 } else {
+                  var paymentTableBody = document.getElementById("paymentHistoryBody");
+                  for(let i = 0; i < response.items.length; i++ ) {
+                    var row = paymentTableBody.insertRow(i);
+
+                    var cellNumber = row.insertCell(0);
+                    var cellDate = row.insertCell(1);
+                    var cellPaymentAmount = row.insertCell(2);
+                    // var cellDeletePayment = row.insertCell(3);
+
+                    cellNumber.innerHTML = i + 1;
+                    cellDate.innerHTML = new Date(
+                      response.items[i].dateTime
+                    ).toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "numeric",
+                      year: "numeric",
+                    });
+                    cellPaymentAmount.innerHTML = response.items[i].amountPaid;
+                    // cellDeletePayment.innerHTML = response.items[i].paymentId;
+
+                  }
                   document.getElementById("paymentHistory").classList.remove('d-none');
                 }
 
@@ -171,6 +192,48 @@ function SavePatientRecord() {
         },
         error: function (xhr, status, error) {
           alert("There was an error in updating patient.");
+        },
+      });
+    },
+    error: function (error) {
+      alert("Error retrieving configuration.");
+    },
+  });
+}
+
+function AddPayment() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const idParamValue = urlParams.get('id');
+
+  $.ajax({
+    url: "/config.json",
+    type: "GET",
+    dataType: "json",
+    success: function (configData) {
+      var endpoint = 'AddPayment';
+
+      var requestBody = {
+        patientId: idParamValue,
+        amountPaid: $("#paymentAmount").val(),
+        dateTime: $("#paymentDate").val(),
+        printReceipt: document.getElementById("printPaymentReceipt").checked
+      };
+
+      requestBody = cleanObject(requestBody);
+
+      console.log("Request URL:", configData.apiUrl + '/' + endpoint);
+
+      $.ajax({
+        url: configData.apiUrl + '/' + endpoint,
+        type: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify(requestBody),
+        success: function (response) {
+          console.log("Add Payment API Response:", response);
+          window.location.reload();
+        },
+        error: function (xhr, status, error) {
+          alert("There was an error in adding payment.");
         },
       });
     },

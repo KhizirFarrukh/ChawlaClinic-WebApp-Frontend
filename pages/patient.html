@@ -100,6 +100,7 @@
     </div>
     <hr>
     <div style="margin-top: 15px;">
+      <h4>Add Payment</h4>
       <div class="input-group mb-3">
         <span class="input-group-text" for="paymentAmount">Payment Amount</span>
         <input type="number" class="form-control" id="paymentAmount" name="paymentAmount" style="max-width: 110px;"
@@ -109,7 +110,11 @@
         <span class="input-group-text" id="basic-addon1" for="paymentDate">Payment Date</span>
         <input type="date" class="form-control" id="paymentDate" name="paymentDate" style="max-width: 150px;" required>
       </div>
-      <button type="button" name="addPayment" class="btn btn-primary"> Add Payment</button>
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" onclick="alert('This feature is not developed yet.')" id="printPaymentReceipt">
+        <label class="form-check-label" for="printPaymentReceipt">Print Receipt</label>
+      </div>
+      <button type="button" name="addPayment" class="btn btn-primary" onclick="AddPayment()"> Add Payment</button>
     </div>
     </div>
     <div id="editPatientContainer" class="d-none">
@@ -241,7 +246,7 @@
               <th scope="col">#</th>
               <th scope="col">Date</th>
               <th scope="col">Payment Amount</th>
-              <th scope="col">Delete</th>
+              <!-- <th scope="col">Delete</th> -->
             </tr>
           </thead>
           <tbody id="paymentHistoryBody">
