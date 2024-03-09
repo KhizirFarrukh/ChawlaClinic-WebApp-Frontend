@@ -7,8 +7,6 @@ document.addEventListener('DOMContentLoaded', function () {
     type: "GET",
     dataType: "json",
     success: function (configData) {
-      console.log("API URL:", configData.apiUrl);
-  
       var endpoint = 'GetPatientById';
   
       var requestData = {
@@ -18,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function () {
       requestData = cleanObject(requestData);
   
       var queryString = $.param(requestData);
+  
+      console.log("Request URL:", configData.apiUrl + '/' + endpoint + "?" + queryString);
   
       $.ajax({
         url: configData.apiUrl + '/' + endpoint + "?" + queryString,
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
               status.style.color = 'green';
             } else if (response.status === 'Closed') {
               status.style.color = 'red';
-            } else  {
+            } else {
               status.style.color = 'black';
             }
             document.getElementById("phoneNumber").innerText = response.phoneNumber;
@@ -73,12 +73,48 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById("descriptionEdit").value = response.description;
 
             document.getElementById("patientData").classList.remove('d-none');
+
+            var getPaymentEndpoint = "GetPaymentsByPatientId";
+
+            var requestData = {
+              PatientId: idParamValue,
+              Size: 10,
+              Page: 1,
+              IsAscending: false,
+              SortColumn: "DateTime",
+            };
+
+            requestData = cleanObject(requestData);
+
+            var getPaymentQueryString = $.param(requestData);
+
+            $.ajax({
+              url: configData.apiUrl + '/' + getPaymentEndpoint + "?" + getPaymentQueryString,
+              type: "GET",
+              dataType: "json",
+              success: function (response) {
+                console.log("API Response:", response);
+        
+                if(response === undefined || response === null) {
+                  document.getElementById("paymentRecordsNotFound").classList.remove('d-none');
+                } else {
+                  document.getElementById("paymentHistoryTable").classList.remove('d-none');
+                }
+        
+                document.getElementById("patientPageLoading").classList.add('d-none');
+              },
+              error: function (xhr, status, error) {
+                alert("There was an error in retrieving payment records.");
+              },
+            });
           }
   
           document.getElementById("patientPageLoading").classList.add('d-none');
         },
         error: function (xhr, status, error) {
           alert("There was an error in retrieving search results.");
+          document.getElementById("patientPageLoading").classList.add('d-none');
+          document.getElementById("patientLoadingFailed").classList.remove('d-none');
         },
       });
     },
