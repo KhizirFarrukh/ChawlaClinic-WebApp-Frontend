@@ -36,6 +36,7 @@
     </div>
     <h3 id="patientNotFound" class="d-none d-flex justify-content-center">No record found</h3>
     <div id="patientData" class="d-none">
+    <div id="viewPatientContainer">
       <div id="BasicInfo">
         <table class="table table-striped table-bordered">
           <tbody>
@@ -110,8 +111,8 @@
       </div>
       <button type="button" name="addPayment" class="btn btn-primary"> Add Payment</button>
     </div>
-    <hr>
-    <div id="PatientEditing" class="d-none">
+    </div>
+    <div id="editPatientContainer" class="d-none">
       <table class="table table-striped table-bordered">
         <tbody>
           <tr>
@@ -150,11 +151,9 @@
           <tr>
             <td colspan="5">
               <div class="input-group">
-                <span class="input-group-text" id="basic-addon1"><strong>Disease</strong></span>
-                <select class="form-select" id="patientTypeEdit" style="max-width: 130px;">
-                  <option value="B" selected>Burns</option>
-                  <option value="G">General</option>
-                </select>
+                <span class="input-group-text" id="basic-addon1"><strong>Disease<span id="patientTypeEdit"></span></strong></span>
+                <span id="patientTypeEdit">
+                </span>
                 <input type="text" class="form-control" id="diseaseEdit">
               </div>
             </td>
@@ -215,7 +214,7 @@
         style="padding-left: 10px;padding-right: 5px;" placeholder="Enter Patient Description here..."></textarea>
     </div>
       <div class="d-flex justify-content-end" style="margin-top: 30px;">
-        <button type="button" id="savePatient" class="btn btn-primary">
+        <button type="button" id="savePatient" onclick="SavePatientRecord()" class="btn btn-primary">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-square"
             viewBox="0 0 16 16">
             <path
@@ -228,27 +227,30 @@
       </div>
       <hr>
     </div>
-    <div id="paymentHistory">
-      <div>
-        <h4>Payment History</h4>
-      </div>
+    <div style="margin-top: 2rem;">
       <div id="paymentRecordsNotFound" class="alert alert-info d-flex d-none justify-content-center" style="font-size: 1.5rem; font-weight: 500;" role="alert">
         No payment records were found.
       </div>
-      <table class="table d-none" id="paymentHistoryTable">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Date</th>
-            <th scope="col">Payment Amount</th>
-            <th scope="col">Delete</th>
-          </tr>
-        </thead>
-        <tbody id="paymentHistoryBody">
-
-        </tbody>
-      </table>
+      <div id="paymentHistory" class="d-none">
+        <div>
+          <h4>Payment History</h4>
+        </div>
+        <table class="table" id="paymentHistoryTable">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Date</th>
+              <th scope="col">Payment Amount</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody id="paymentHistoryBody">
+  
+          </tbody>
+        </table>
+      </div>
     </div>
+    
     </div>
   </div>
 </body>
