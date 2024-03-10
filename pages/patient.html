@@ -111,7 +111,7 @@
         <input type="date" class="form-control" id="paymentDate" name="paymentDate" style="max-width: 150px;" required>
       </div>
       <div class="form-check mb-3">
-        <input class="form-check-input" type="checkbox" onclick="alert('This feature is not developed yet.')" id="printPaymentReceipt">
+        <input class="form-check-input" type="checkbox" onclick="CheckboxFeatureNotAvailable(this)" id="printPaymentReceipt">
         <label class="form-check-label" for="printPaymentReceipt">Print Receipt</label>
       </div>
       <button type="button" name="addPayment" class="btn btn-primary" onclick="AddPayment()"> Add Payment</button>
@@ -237,8 +237,17 @@
         No payment records were found.
       </div>
       <div id="paymentHistory" class="d-none">
-        <div>
+        <div class="d-flex justify-content-between align-items-center">
           <h4>Payment History</h4>
+          <div class="d-flex align-items-center">
+            <label for="paymentHistorySize" class="form-label" style="padding-top: 0.25rem;">Results per page</label>
+            <select class="form-select" id="paymentHistorySize" data-live-search="true" style="width: 5rem;margin-left: 0.5rem;">
+              <option value="10" selected>10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+           </select>
+          </div>
         </div>
         <table class="table" id="paymentHistoryTable">
           <thead>
@@ -253,6 +262,22 @@
   
           </tbody>
         </table>
+        <nav aria-label="..." class="d-none">
+          <ul class="pagination justify-content-center mb-1" id="paymentPaginationContainer">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true" id="pagination-prev">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#" id="pagination-page-1">1</a></li>
+            <li class="page-item active" aria-current="page" id="pagination-page-2">
+              <a class="page-link" href="#">2</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#" id="pagination-page-3">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#" id="pagination-next">Next</a>
+            </li>
+          </ul>
+          <p class="d-flex justify-content-center text-muted small font-italic">Showing&nbsp;<span id="paymentHistoryRangeText"></span>&nbsp;of&nbsp;<span id="paymentHistoryCountText"></span>&nbsp;results.</p>
+        </nav>
       </div>
     </div>
     

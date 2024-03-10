@@ -12,7 +12,8 @@ function createPaginationButton(
   pageNumber,
   isActive,
   isDisabled,
-  container
+  container,
+  onclickFunction
 ) {
   var li = document.createElement("li");
   li.className = "page-item" + (isActive ? " active" : "");
@@ -30,6 +31,11 @@ function createPaginationButton(
 
   link.addEventListener("click", function () {
     var pageNumber = parseInt(link.getAttribute("data-page"));
-    searchData(pageNumber);
+    onclickFunction(pageNumber, true);
   });
+}
+
+function CheckboxFeatureNotDeveloped(checkbox) {
+  alert('This feature is not developed yet.');
+  checkbox.checked = false;
 }

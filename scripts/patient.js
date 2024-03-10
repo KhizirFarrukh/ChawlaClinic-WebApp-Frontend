@@ -7,136 +7,13 @@ document.addEventListener('DOMContentLoaded', function () {
     type: "GET",
     dataType: "json",
     success: function (configData) {
-      var endpoint = 'GetPatientById';
+      GetPatientData(idParamValue, configData);
+      GetPayments(1, false);
 
-      var requestData = {
-        patientId: idParamValue
-      };
+      var paymentHistorySize = document.getElementById('paymentHistorySize');
 
-      requestData = cleanObject(requestData);
-
-      var queryString = $.param(requestData);
-
-      console.log("Request URL:", configData.apiUrl + '/' + endpoint + "?" + queryString);
-
-      $.ajax({
-        url: configData.apiUrl + '/' + endpoint + "?" + queryString,
-        type: "GET",
-        dataType: "json",
-        success: function (response) {
-          console.log("Patient API Response:", response);
-
-          if (response === undefined || response === null) {
-            document.getElementById("patientNotFound").classList.remove('d-none');
-          } else {
-            document.getElementById("patientName").innerText = response.name;
-            document.getElementById("age").innerText = response.ageYears + ' years, ' + response.ageMonths + ' months';
-            document.getElementById("gender").innerText = response.gender === 'M' ? 'Male' : 'Female';
-            document.getElementById("guardianName").innerText = response.guardianName;
-            document.getElementById("patientType").innerText = response.type === 'B' ? 'Burns' : 'General';
-            document.getElementById("disease").innerText = response.disease;
-            document.getElementById("address").innerText = response.address;
-            document.getElementById("caseNo").innerText = response.caseNo;
-            var status = document.getElementById("status");
-            status.innerText = response.status;
-            if (response.status === 'Active') {
-              status.style.color = 'green';
-            } else if (response.status === 'Closed') {
-              status.style.color = 'red';
-            } else {
-              status.style.color = 'black';
-            }
-            document.getElementById("phoneNumber").innerText = response.phoneNumber;
-            document.getElementById("firstVisit").innerText = new Date(
-              response.firstVisit
-            ).toLocaleDateString("en-GB", {
-              day: "numeric",
-              month: "numeric",
-              year: "numeric",
-            });
-            document.getElementById("discountMode").innerText = response.discount.title;
-            document.getElementById("descriptionReadOnly").value = response.description;
-
-            document.getElementById("patientNameEdit").value = response.name;
-            document.getElementById("ageYearsEdit").value = response.ageYears;
-            document.getElementById("ageMonthsEdit").value = response.ageMonths;
-            document.getElementById("genderEdit").value = response.gender;
-            document.getElementById("guardianNameEdit").value = response.guardianName;
-            document.getElementById("patientTypeEdit").innerText = response.type === 'B' ? ' (Burns)' : ' (General)';
-            document.getElementById("diseaseEdit").value = response.disease;
-            document.getElementById("addressEdit").value = response.address;
-            document.getElementById("caseNoEdit").innerText = response.caseNo;
-            document.getElementById("statusEdit").value = response.status;
-            document.getElementById("phoneNumberEdit").value = response.phoneNumber;
-            document.getElementById("firstVisitEdit").value = response.firstVisit.split('T')[0];
-            document.getElementById("discountModeEdit").value = response.discount.discountId;
-            document.getElementById("descriptionEdit").value = response.description;
-
-            document.getElementById("patientData").classList.remove('d-none');
-
-            var getPaymentEndpoint = "GetPaymentsByPatientId";
-
-            var requestData = {
-              PatientId: idParamValue,
-              Size: 10,
-              Page: 1,
-              IsAscending: false,
-              SortColumn: "DateTime",
-            };
-
-            requestData = cleanObject(requestData);
-
-            var getPaymentQueryString = $.param(requestData);
-
-            $.ajax({
-              url: configData.apiUrl + '/' + getPaymentEndpoint + "?" + getPaymentQueryString,
-              type: "GET",
-              dataType: "json",
-              success: function (response) {
-                console.log("Payment API Response:", response);
-
-                if (response === undefined || response === null || response.totalCount === 0) {
-                  document.getElementById("paymentRecordsNotFound").classList.remove('d-none');
-                } else {
-                  var paymentTableBody = document.getElementById("paymentHistoryBody");
-                  for(let i = 0; i < response.items.length; i++ ) {
-                    var row = paymentTableBody.insertRow(i);
-
-                    var cellNumber = row.insertCell(0);
-                    var cellDate = row.insertCell(1);
-                    var cellPaymentAmount = row.insertCell(2);
-                    // var cellDeletePayment = row.insertCell(3);
-
-                    cellNumber.innerHTML = i + 1;
-                    cellDate.innerHTML = new Date(
-                      response.items[i].dateTime
-                    ).toLocaleDateString("en-GB", {
-                      day: "numeric",
-                      month: "numeric",
-                      year: "numeric",
-                    });
-                    cellPaymentAmount.innerHTML = response.items[i].amountPaid;
-                    // cellDeletePayment.innerHTML = response.items[i].paymentId;
-
-                  }
-                  document.getElementById("paymentHistory").classList.remove('d-none');
-                }
-
-                document.getElementById("patientPageLoading").classList.add('d-none');
-              },
-              error: function (xhr, status, error) {
-                alert("There was an error in retrieving payment records.");
-              },
-            });
-          }
-
-          document.getElementById("patientPageLoading").classList.add('d-none');
-        },
-        error: function (xhr, status, error) {
-          alert("There was an error in retrieving patient record.");
-          document.getElementById("patientPageLoading").classList.add('d-none');
-          document.getElementById("patientLoadingFailed").classList.remove('d-none');
-        },
+      paymentHistorySize.addEventListener('change', function () {
+        GetPayments(1, true);
       });
     },
     error: function (error) {
@@ -144,6 +21,86 @@ document.addEventListener('DOMContentLoaded', function () {
     },
   });
 });
+
+function GetPatientData(PatientId, ConfigData) {
+  var endpoint = 'GetPatientById';
+
+  var requestData = {
+    patientId: PatientId
+  };
+
+  requestData = cleanObject(requestData);
+
+  var queryString = $.param(requestData);
+
+  console.log("Request URL:", ConfigData.apiUrl + '/' + endpoint + "?" + queryString);
+
+  $.ajax({
+    url: ConfigData.apiUrl + '/' + endpoint + "?" + queryString,
+    type: "GET",
+    dataType: "json",
+    success: function (response) {
+      console.log("Patient API Response:", response);
+
+      if (response === undefined || response === null) {
+        document.getElementById("patientNotFound").classList.remove('d-none');
+      } else {
+        document.getElementById("patientName").innerText = response.name;
+        document.getElementById("age").innerText = response.ageYears + ' years, ' + response.ageMonths + ' months';
+        document.getElementById("gender").innerText = response.gender === 'M' ? 'Male' : 'Female';
+        document.getElementById("guardianName").innerText = response.guardianName;
+        document.getElementById("patientType").innerText = response.type === 'B' ? 'Burns' : 'General';
+        document.getElementById("disease").innerText = response.disease;
+        document.getElementById("address").innerText = response.address;
+        document.getElementById("caseNo").innerText = response.caseNo;
+        var status = document.getElementById("status");
+        status.innerText = response.status;
+        if (response.status === 'Active') {
+          status.style.color = 'green';
+        } else if (response.status === 'Closed') {
+          status.style.color = 'red';
+        } else {
+          status.style.color = 'black';
+        }
+        document.getElementById("phoneNumber").innerText = response.phoneNumber;
+        document.getElementById("firstVisit").innerText = new Date(
+          response.firstVisit
+        ).toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "numeric",
+          year: "numeric",
+        });
+        document.getElementById("discountMode").innerText = response.discount.title;
+        document.getElementById("descriptionReadOnly").value = response.description;
+
+        document.getElementById("patientNameEdit").value = response.name;
+        document.getElementById("ageYearsEdit").value = response.ageYears;
+        document.getElementById("ageMonthsEdit").value = response.ageMonths;
+        document.getElementById("genderEdit").value = response.gender;
+        document.getElementById("guardianNameEdit").value = response.guardianName;
+        document.getElementById("patientTypeEdit").innerText = response.type === 'B' ? ' (Burns)' : ' (General)';
+        document.getElementById("diseaseEdit").value = response.disease;
+        document.getElementById("addressEdit").value = response.address;
+        document.getElementById("caseNoEdit").innerText = response.caseNo;
+        document.getElementById("statusEdit").value = response.status;
+        document.getElementById("phoneNumberEdit").value = response.phoneNumber;
+        document.getElementById("firstVisitEdit").value = response.firstVisit.split('T')[0];
+        document.getElementById("discountModeEdit").value = response.discount.discountId;
+        document.getElementById("descriptionEdit").value = response.description;
+
+        document.getElementById("patientData").classList.remove('d-none');
+
+      }
+
+      document.getElementById("patientPageLoading").classList.add('d-none');
+    },
+    error: function (xhr, status, error) {
+      alert("There was an error in retrieving patient record.");
+      document.getElementById("patientPageLoading").classList.add('d-none');
+      document.getElementById("patientLoadingFailed").classList.remove('d-none');
+    },
+  });
+}
 
 function PatientEditMode() {
   document.getElementById("viewPatientContainer").classList.add('d-none');
@@ -234,6 +191,136 @@ function AddPayment() {
         },
         error: function (xhr, status, error) {
           alert("There was an error in adding payment.");
+        },
+      });
+    },
+    error: function (error) {
+      alert("Error retrieving configuration.");
+    },
+  });
+}
+
+function GetPayments(PageNumber, ScrollToTable) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const idParamValue = urlParams.get('id');
+
+  $.ajax({
+    url: "/config.json",
+    type: "GET",
+    dataType: "json",
+    success: function (configData) {
+      var getPaymentEndpoint = "GetPaymentsByPatientId";
+
+      var requestData = {
+        PatientId: idParamValue,
+        Size: $('#paymentHistorySize').val(),
+        Page: PageNumber,
+        IsAscending: false,
+        SortColumn: "DateTime",
+      };
+console.log(requestData)
+      requestData = cleanObject(requestData);
+
+      var getPaymentQueryString = $.param(requestData);
+
+      $.ajax({
+        url: configData.apiUrl + '/' + getPaymentEndpoint + "?" + getPaymentQueryString,
+        type: "GET",
+        dataType: "json",
+        success: function (response) {
+          console.log("Payment API Response:", response);
+
+          if (response === undefined || response === null || response.totalCount === 0) {
+            document.getElementById("paymentRecordsNotFound").classList.remove('d-none');
+          } else {
+            var paymentTableBody = document.getElementById("paymentHistoryBody");
+
+            paymentTableBody.innerHTML = "";
+
+            for (let i = 0; i < response.items.length; i++) {
+              var row = paymentTableBody.insertRow(i);
+
+              var cellNumber = row.insertCell(0);
+              var cellDate = row.insertCell(1);
+              var cellPaymentAmount = row.insertCell(2);
+              // var cellDeletePayment = row.insertCell(3);
+
+              cellNumber.innerHTML = i + 1;
+              cellDate.innerHTML = new Date(
+                response.items[i].dateTime
+              ).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "numeric",
+                year: "numeric",
+              });
+              cellPaymentAmount.innerHTML = response.items[i].amountPaid;
+              // cellDeletePayment.innerHTML = response.items[i].paymentId;
+
+            }
+
+            var currentPage = response.pageNumber;
+            var maxPagesToShow = 2;
+            var totalPages = response.totalPages;
+
+            var paginationContainer = document.getElementById(
+              "paymentPaginationContainer"
+            );
+            paginationContainer.parentNode.classList.remove("d-none");
+            paginationContainer.innerHTML = "";
+
+            var startPage = Math.max(1, currentPage - maxPagesToShow);
+            var endPage = Math.min(totalPages, currentPage + maxPagesToShow);
+
+            createPaginationButton(
+              "Previous",
+              currentPage > 1 ? currentPage - 1 : 1,
+              false,
+              currentPage === 1,
+              paginationContainer,
+              GetPayments
+            );
+
+            for (var i = startPage; i <= endPage; i++) {
+              createPaginationButton(
+                i,
+                i,
+                i === currentPage,
+                false,
+                paginationContainer,
+                GetPayments
+              );
+            }
+
+            createPaginationButton(
+              "Next",
+              currentPage < totalPages ? currentPage + 1 : totalPages,
+              false,
+              currentPage === totalPages,
+              paginationContainer,
+              GetPayments
+            );
+
+            var countBeforeCurrentPage = (currentPage - 1) * response.pageSize;
+
+            document.getElementById("paymentHistoryRangeText").innerText =
+              countBeforeCurrentPage +
+              1 +
+              "-" +
+              (countBeforeCurrentPage + response.items.length);
+            document.getElementById("paymentHistoryCountText").innerText =
+              response.totalCount;
+
+            document.getElementById("paymentHistory").classList.remove('d-none');
+            if (ScrollToTable) {
+              document.getElementById("paymentHistoryTable").scrollIntoView(true);
+            }
+
+          }
+
+          document.getElementById("patientPageLoading").classList.add('d-none');
+        },
+        error: function (xhr, status, error) {
+          alert("There was an error in retrieving payment records.");
         },
       });
     },

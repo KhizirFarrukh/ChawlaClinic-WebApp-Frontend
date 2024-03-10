@@ -21,7 +21,7 @@ function disabledFunctionality() {
   alert("This functionality is disabled right now.");
 }
 
-function searchData(pageNumber) {
+function searchData(pageNumber, ScrollToTable) {
   $("#search-patient")
     .prop("disabled", true)
     .contents()
@@ -130,7 +130,8 @@ function searchData(pageNumber) {
               currentPage > 1 ? currentPage - 1 : 1,
               false,
               currentPage === 1,
-              paginationContainer
+              paginationContainer,
+              searchData
             );
 
             for (var i = startPage; i <= endPage; i++) {
@@ -139,7 +140,8 @@ function searchData(pageNumber) {
                 i,
                 i === currentPage,
                 false,
-                paginationContainer
+                paginationContainer,
+                searchData
               );
             }
 
@@ -148,7 +150,8 @@ function searchData(pageNumber) {
               currentPage < totalPages ? currentPage + 1 : totalPages,
               false,
               currentPage === totalPages,
-              paginationContainer
+              paginationContainer,
+              searchData
             );
 
             var countBeforeCurrentPage = (currentPage - 1) * response.pageSize;
@@ -160,8 +163,9 @@ function searchData(pageNumber) {
               (countBeforeCurrentPage + response.items.length);
             document.getElementById("searchResultCountText").innerText =
               response.totalCount;
-
-            table.scrollIntoView({ behavior: "smooth" });
+            if (ScrollToTable) {
+              table.scrollIntoView({ behavior: "smooth" });
+            }
           } else {
             document
               .getElementById("searchResultTable")
@@ -195,6 +199,6 @@ function searchData(pageNumber) {
 
 $(document).ready(function () {
   $("#search-patient").on("click", function () {
-    searchData(1);
+    searchData(1, true);
   });
 });
