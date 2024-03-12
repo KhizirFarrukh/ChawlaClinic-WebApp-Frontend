@@ -38,7 +38,7 @@ function searchData(pageNumber, ScrollToTable) {
     success: function (configData) {
       console.log("API URL:", configData.apiUrl);
 
-      var endpoint = 'SearchPatient';
+      var endpoint = "SearchPatient";
 
       var requestData = {
         SearchParam: $("#searchParam").val(),
@@ -57,7 +57,7 @@ function searchData(pageNumber, ScrollToTable) {
       var queryString = $.param(requestData);
 
       $.ajax({
-        url: configData.apiUrl + '/' + endpoint + "?" + queryString,
+        url: configData.apiUrl + "/" + endpoint + "?" + queryString,
         type: "GET",
         dataType: "json",
         success: function (response) {
@@ -201,4 +201,44 @@ $(document).ready(function () {
   $("#search-patient").on("click", function () {
     searchData(1, true);
   });
+  document
+    .getElementById("AddPatientForm")
+    .addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      document.getElementById("AddPatientButton").classList.add("d-none");
+      document.getElementById("AddPatientLoading").classList.remove("d-none");
+
+      var formData = new FormData(event.target);
+      $.ajax({
+        url: "/config.json",
+        type: "GET",
+        dataType: "json",
+        success: function (configData) {
+          fetch(configData.apiUrl + "/AddPatient", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(Object.fromEntries(formData)),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              window.location.href = '/pages/patient.html?id=' + data;
+              document.getElementById("AddPatientLoading").classList.add('d-none');
+              document.getElementById("AddPatientButton").classList.remove('d-none');
+              console.log(data);
+            })
+            .catch((error) => {
+              alert("There was an error in adding patient.");
+              document.getElementById("AddPatientLoading").classList.add('d-none');
+              document.getElementById("AddPatientButton").classList.remove('d-none');
+              console.error("Error:", error);
+            });
+        },
+        error: function (error) {
+          alert("Error retrieving configuration.");
+        },
+      });
+    });
 });

@@ -186,32 +186,32 @@
     </div>
     <div id="AddPatient" style="margin-top:25px">
       <h4>Add Patient</h4>
-      <form method="POST">
+      <form id="AddPatientForm" method="POST">
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">Patient's Name<span
               style="color: red;"><strong>*</strong></span></span>
-          <input type="text" class="form-control" id="patientname" name="patientname" placeholder="Enter Patient's Name"
+          <input type="text" class="form-control" id="PatientNameInput" name="Name" placeholder="Enter Patient's Name"
             style="max-width: 400px;" required>
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Age</span>
           <span class="input-group-text" id="basic-addon1">(Years)</span>
-          <input type="number" class="form-control" id="ageyears" style="max-width: 6.25rem;min-width: 3rem;" name="ageyears" value=0
+          <input type="number" class="form-control" id="AgeYearsInput" style="max-width: 6.25rem;min-width: 3rem;" name="AgeYears" value=0
             min=0 required>
           <span class="input-group-text" id="basic-addon1">(Months)</span>
-          <input type="number" class="form-control" id="agemonths" style="max-width: 6.25rem;min-width: 3rem;" name="agemonths" value=0
+          <input type="number" class="form-control" id="AgeMonthsInput" style="max-width: 6.25rem;min-width: 3rem;" name="AgeMonths" value=0
             min=0 max=11 required>
         </div>
         <div class="input-group mb-3">
           <label class="input-group-text" for="gender">Gender</label>
-          <select class="form-select" id="gender" name="gender" style="width: 6.25rem;max-width: 6.875rem;">
+          <select class="form-select" id="GenderInput" name="Gender" style="width: 6.25rem;max-width: 6.875rem;">
             <option value="M" selected>Male</option>
             <option value="F">Female</option>
           </select>
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">Guardian's Name</span>
-          <input type="text" class="form-control" id="guardianname" name="guardianname"
+          <input type="text" class="form-control" id="GuardianNameInput" name="GuardianName"
             placeholder="Enter Guardian's Name" style="max-width: 400px;">
         </div>
         <div class="input-group mb-3">
@@ -223,23 +223,23 @@
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">Disease</span>
-          <input type="text" class="form-control" id="disease" name="disease" style="max-width: 603px;"
+          <input type="text" class="form-control" id="DiseaseInput" name="Disease" style="max-width: 603px;"
             placeholder="Enter Patient's Disease">
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">Address</span>
-          <input type="text" class="form-control" id="address" name="address" style="max-width: 600px;"
+          <input type="text" class="form-control" id="AddressInput" name="Address" style="max-width: 600px;"
             placeholder="Enter Patient's Address">
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">Phone Number</span>
-          <input type="tel" class="form-control" id="phonenum" name="phonenum" style="max-width: 130px;"
+          <input type="tel" class="form-control" id="PhoneNumberInput" name="PhoneNumber" style="max-width: 130px;"
             placeholder="03XXXXXXXXX" pattern="[0][3][0-4][0-9]{8}" maxlength="11">
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">Case Number<span
               style="color: red;"><strong>*</strong></span></span>
-          <input type="text" class="form-control" id="caseno" name="caseno" style="max-width: 120px;" placeholder="1234"
+          <input type="text" class="form-control" id="CaseNoInput" name="CaseNo" style="max-width: 120px;" placeholder="1234"
             maxlength="4" required>
           <span>
             <div class="form-check form-switch" style="margin-left:30px;margin-top:5px;margin-right: 10px;"
@@ -253,15 +253,21 @@
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">First Visit Date<span
               style="color: red;"><strong>*</strong></span></span>
-          <input type="date" class="form-control" id="firstvisit" name="firstvisit" style="max-width: 150px;" required>
+          <input type="date" class="form-control" id="FirstVisitInput" name="FirstVisit" style="max-width: 150px;" required>
         </div>
-        <button type="submit" class="mt-10 btn btn-primary btn-lg" name="AddPatient" value="True">
-          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus"
+        <button type="submit" class="mt-10 btn btn-primary btn-lg" id="AddPatient" name="AddPatient" value="True">
+          <div id="AddPatientButton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus"
             viewBox="0 0 16 16">
             <path
               d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
           </svg>
           Add Patient
+          </div>
+          <div class="d-none spinner-border spinner-border-sm" id="AddPatientLoading" role="status">
+            <span class="visually-hidden" >Adding...</span>
+          </div>
+          
         </button>
       </form>
       <br><br>
