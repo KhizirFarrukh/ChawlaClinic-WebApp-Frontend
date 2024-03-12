@@ -6,12 +6,11 @@ RUN a2enmod rewrite
 
 WORKDIR /var/www/html
 
-COPY pages/ pages/
-COPY styles/ styles/
-COPY scripts/ scripts/
-COPY bootstrap/ bootstrap/
-COPY partials/ partials/
-COPY config.json /var/www/html/config.json
+COPY files/ files/
+COPY index.html /var/www/html/index.html
+COPY page-not-found.html /var/www/html/page-not-found.html
+COPY patient.html /var/www/html/patient.html
+COPY under-construction.html /var/www/html/under-construction.html
 
 EXPOSE 80
 
