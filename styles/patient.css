@@ -1,0 +1,10 @@
+body {
+  padding-bottom: 200px;
+}
+.wrapper {
+  /* white-space: pre-line; */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
