@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const idParamValue = urlParams.get('id');
 
   $.ajax({
-    url: "/config.json",
+    url: "../config.json",
     type: "GET",
     dataType: "json",
     success: function (configData) {
@@ -112,7 +112,7 @@ function SavePatientRecord() {
   const idParamValue = urlParams.get('id');
 
   $.ajax({
-    url: "/config.json",
+    url: "../config.json",
     type: "GET",
     dataType: "json",
     success: function (configData) {
@@ -163,7 +163,7 @@ function AddPayment() {
   const idParamValue = urlParams.get('id');
 
   $.ajax({
-    url: "/config.json",
+    url: "../config.json",
     type: "GET",
     dataType: "json",
     success: function (configData) {
@@ -205,7 +205,7 @@ function GetPayments(PageNumber, ScrollToTable) {
   const idParamValue = urlParams.get('id');
 
   $.ajax({
-    url: "/config.json",
+    url: "../config.json",
     type: "GET",
     dataType: "json",
     success: function (configData) {

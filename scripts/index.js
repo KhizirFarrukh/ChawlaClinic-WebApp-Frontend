@@ -32,7 +32,7 @@ function searchData(pageNumber, ScrollToTable) {
 
   $("#search-loading").removeClass("d-none");
   $.ajax({
-    url: "/config.json",
+    url: "../config.json",
     type: "GET",
     dataType: "json",
     success: function (configData) {
@@ -217,7 +217,7 @@ $(document).ready(function () {
 
       var formData = new FormData(event.target);
       $.ajax({
-        url: "/config.json",
+        url: "../config.json",
         type: "GET",
         dataType: "json",
         success: function (configData) {
