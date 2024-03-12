@@ -197,6 +197,12 @@ function searchData(pageNumber, ScrollToTable) {
   });
 }
 
+function HandleSearchKeyPress(event) {
+  if(event.key === "Enter") {
+    searchData(1, true);
+  }
+}
+
 $(document).ready(function () {
   $("#search-patient").on("click", function () {
     searchData(1, true);
